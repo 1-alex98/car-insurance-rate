@@ -2,8 +2,7 @@ name: Build Gradle project
 
 on:
   push:
-permissions:
-  checks: write
+
 jobs:
   build-gradle-project:
     runs-on: ubuntu-latest
