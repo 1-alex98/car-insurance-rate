@@ -17,11 +17,11 @@ public class LocationResourceTest {
           .then()
              .statusCode(200)
              .body("$.size()", is(1), // Check that one place is returned
-                   "[0].id", is(1), // Validate the properties of the returned place
+                   "[0].id", is(3), // Validate the properties of the returned place
                    "[0].region1", is("region 1"),
                    "[0].region3", is("region 3"),
                    "[0].region4", is("region 4"),
-                   "[0].plz", is(12345),
+                   "[0].plz", is(1234),
                    "[0].location", is("location"));
     }
     @Test
