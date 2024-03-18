@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>car-insurance-rate</title>
+    <link rel="icon" type="image/png" href="/branding/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+</head>
+<body>
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+</script>
+
+<script src="vehicle.js" defer></script>
+<script src="location.js"></script>
+<script src="rate.js"></script>
+<div class="m-2">
+    <h2 class="pb-3">Car Insurance Rate PoC <img src="branding/logo.png" style="height: 1em"/></h2>
+
+    <div class="alert alert-danger d-none" role="alert" id="error">
+        Error
+    </div>
+    <form class="row g-3 needs-validation" onsubmit="event.preventDefault(); rate(); return false;" novalidate>
+        <div class="row">
+            <div class="accordion accordion-flush col-md-6" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Open Api and Swagger
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            The Open API spec was created before the actual application it can be fetched via <a href="/q/openapi">/q/openapi</a>. There is also a Swagger UI that can be visited at <a href="/q/docs">/q/docs</a>.
+                            The "design-first" strategy means:
+                            <ul>
+                                <li><strong>Clearer Understanding</strong>: It allows for a clearer understanding of the API's capabilities before any code is written.</li>
+                                <li><strong>Early Feedback</strong>: Stakeholders can provide feedback early in the process, potentially saving development time and resources.</li>
+                                <li><strong>Better Documentation</strong>: The API documentation is created upfront, making it easier for developers to understand the API and how to use it.</li>
+                                <li><strong>Easier Testing</strong>: With a defined specification, it's easier to write tests, ensuring that the implementation aligns with the design.</li>
+                                <li><strong>No Tight Coupling</strong>:There’s no risk of creating a tight coupling between the API and the implementation details of the code, which can make future changes more difficult.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                            Backend
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <p>I've chosen <strong>Quarkus</strong>, <strong>PostgreSQL</strong>, and an <strong>API-first approach</strong> for this challenge, and here's why:</p>
+
+                            <h3>Quarkus</h3>
+                            <p>I chose Quarkus because it's a cloud-native Java stack tailored for GraalVM and OpenJDK HotSpot. It offers a fast startup time and low memory footprint, which is beneficial for microservices. Quarkus also enhances developer productivity with its live coding feature and supports important frameworks like RESTEasy (JAX-RS), Hibernate ORM (JPA), and CDI.</p>
+
+                            <h3>PostgreSQL</h3>
+                            <p>PostgreSQL is a powerful, open-source object-relational database system. It's fully ACID-compliant, ensuring data integrity and consistency. PostgreSQL is highly extensible and supports advanced data types not available in other databases. It also offers good performance with features like parallel query, asynchronous replication, and multiversion concurrency control (MVCC).
+                            While a no-sql would have been a feasible solution as well, postgresql is mostly better supported in java frameworks for example quarkus. A solution like mongodb might indeed give better performance.</p>
+
+                            <h3>API-First Approach</h3>
+                            <p>An API-first approach means that the APIs are treated as "first-class citizens". This approach allows for better collaboration between front-end and back-end developers, ensuring consistency across multiple platforms. Importantly, it means that the web application will also consume the API and will not be built using server-side rendering, making the application more flexible to future requirements or integrations.</p>
+
+                            <p>In conclusion, using Quarkus and PostgreSQL with an API-first approach provides a robust, efficient, and flexible solution for this challenge.</p>
+                            <h3>Architecture</h3>
+                            <p>The architecture is more or less a layered architecture. Having Resources serving rest endpoints, services doing the domain logic and repositories doing the database operations. The domain package is where the domain logic lives, even if we do not have too much of it. To shield the domain package from external changes there is a bunch of interfaces in the domain.ports package. Using dependency inversion everything depends on the domain package. There is even a unit test that checks this called <q>ArchitectureTest</q>.  </p>
+                            <p>The architecture has some aspects of ports and adapters. But it kind of misses the adapters. Also there are no dtos in the application and Infrastructure side. Should the application model diverge from the domain model dtos and mappers could still be added.</p>
+                            <h3>Testing</h3>
+                            <p>In a TDD I wrote the ResourceTests(Endpoint tests) before even starting the project just of the open api specs. The tests are mostly happy path tests. Well I only have limited time.</p>
+                            <p>Since we have very little business logic. There are also only a few unit tests more integration tests. The CSVImport is even untested. The CSVImport is only a POC.
+                                The way the CSVImport works right now makes little sense. I suppose we have to talk a little more about the requirements there.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                            POC Front End
+                        </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <h3>Why is the web app in vanilla js?</h3>
+                            <p>Because it was fast XD and it works. If there was more time I would suggest doing it in Vue.js or React.js. Both are widely used and lightweight. All of this also heavily depends on where it is supposed to integrate.</p>
+                            <p>Both React and Vue.js can also load in a part/div of a website not being built with react or vue. Here some <a href="https://react.dev/learn/add-react-to-an-existing-project#using-react-for-a-part-of-your-existing-page">example</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-3">
+                <label for="zipInput" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="zipInput" oninput="loadPlace()" required>
+                <div class="invalid-feedback">
+                    Please provide a valid zip.
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="locationInput" class="form-label">Place</label>
+                <select class="form-select" id="locationInput" required>
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="vehicleBrand" class="form-label">Vehicle brand</label>
+                <select class="form-select" id="vehicleBrand" oninput="loadVehicleTypes()" required>
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid type.
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="vehicleType" class="form-label">Vehicle type</label>
+                <select class="form-select" id="vehicleType" required>
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid type.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="kilometersInput" class="form-label">Kilometers driven per year</label>
+                <input type="number" class="form-control" id="kilometersInput" oninput="loadPlace()" min="1" max="1000000" required>
+                <div class="invalid-feedback">
+                    Please provide a valid kilometer number.
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Calculate rate</button>
+        </div>
+    </form>
+    <h2 id="rateWrapper" class="d-none mt-3">Your yearly payment:<span class="badge text-bg-primary" id="rate">Rate</span>€</h2>
+</div>
+
+
+</body>
+</html>

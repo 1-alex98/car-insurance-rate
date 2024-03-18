@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: Insurance Rate Calculator
+  version: 0.1.0
+paths:
+  /place:
+    get:
+      summary: Returns a list of places matching the filter.
+      parameters:
+        - name: plz
+          in: query
+          description: Postcode to filter by
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A JSON array of places
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID
+                    region1:
+                      type: string
+                      description: Bundesland
+                    region3:
+                      type: string
+                      description: Land/Bezirk
+                    region4:
+                      type: string
+                      description: City/Place
+                    plz:
+                      type: integer
+                      description: Postcode
+                    location:
+                      type: string
+                      description: Name of the place
+                  example:
+                    - id: 12345
+                      region1: "Nordrhein-Westfalen"
+                      region3: "Halver"
+                      region4: "Breisgau-Hochschwarzwald"
+                      plz: 79189
+                      location: "Bad Krozingen"
+                    - id: 67890
+                      region1: "Nordrhein-Westfalen"
+                      region3: "Dortmund"
+                      region4: "Ruhrgebiet"
+                      plz: 44135
+                      location: "Dortmund City Center"
+  /car-type:
+    get:
+      summary: Returns a list of all car types.
+      responses:
+        '200': # status code
+          description: A JSON array of car types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Identifier of the car type
+                    name:
+                      type: string
+                      description: Name of the car type
+                    brand:
+                      type: string
+                      description: Brand of the car type
+              examples:
+                carTypes:
+                  summary: A list of car types
+                  value:
+                    - id: 1
+                      name: "Model S"
+                      brand: "Tesla"
+                    - id: 2
+                      name: "3 Series"
+                      brand: "BMW"
+  /rate:
+    get:
+      summary: Get the rate based on car type, location, and yearly kilometers driven
+      parameters:
+        - name: carTypeId
+          in: query
+          description: ID of the car type
+          required: true
+          schema:
+            type: integer
+          example: 4321
+        - name: locationId
+          in: query
+          description: ID of the location
+          required: true
+          schema:
+            type: integer
+          example: 1234
+        - name: yearlyKilometersDriven
+          in: query
+          description: Yearly kilometers driven
+          required: true
+          schema:
+            type: integer
+          example: 15000
+      responses:
+        '200':
+          description: A rate in cents
+          content:
+            application/json:
+              schema:
+                type: integer
+                properties:
+                  rate:
+                    type: integer
+                    description: The rate in cents
+                example:
+                  rate: 500
