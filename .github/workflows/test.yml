@@ -2,13 +2,18 @@ name: Build Gradle project
 
 on:
   push:
-
+permissions:
+  checks: write
 jobs:
   build-gradle-project:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project sources
         uses: actions/checkout@v3
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - name: Run build with Gradle Wrapper
         run: chmod +x ./gradlew && ./gradlew test
       - name: Publish Test Report
