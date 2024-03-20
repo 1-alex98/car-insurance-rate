@@ -61,7 +61,7 @@ public class CSVImport {
     private List<Location> parseLocations(CSVReaderHeaderAware csvReader) {
         String[] value;
         final var res = new ArrayList<Location>();
-        while ((value = csvReader.readNext(" REGION1"," REGION3"," REGION4", " ORT", "AREA1", " POSTLEITZAHL")) != null)
+        while ((value = csvReader.readNext(" REGION1"," REGION3"," REGION4", " ORT", " AREA1", " POSTLEITZAHL")) != null)
         {
             final var location = new Location();
             mapArrayToLocation(location, value);
