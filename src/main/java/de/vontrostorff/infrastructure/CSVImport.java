@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.*;
 import java.util.ArrayList;
@@ -42,10 +45,13 @@ public class CSVImport {
 
     @SneakyThrows
     public List<Location> readFile() {
-        final var uri = getClass().getResource("/" + "import.csv").toURI();
-        try (Reader reader = Files.newBufferedReader(Path.of(uri))) {
-            try (final var csvReader = new CSVReaderHeaderAware(reader)) {
-                return parseLocations(csvReader);
+        //Needs to be read as a stream, works better in prod packaging
+        try(InputStream resourceStream = getClass().getResourceAsStream("/" + "import.csv")){
+            assert resourceStream != null; // if file not found
+            try (Reader reader = new InputStreamReader(resourceStream)) {
+                try (final var csvReader = new CSVReaderHeaderAware(reader)) {
+                    return parseLocations(csvReader);
+                }
             }
         }
     }
