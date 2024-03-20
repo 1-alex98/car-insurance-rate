@@ -1,5 +1,6 @@
 package de.vontrostorff.infrastructure;
 
+import com.google.common.base.Strings;
 import com.opencsv.*;
 import de.vontrostorff.domain.model.Location;
 import de.vontrostorff.domain.ports.incoming.LocationCommands;
@@ -82,13 +83,17 @@ public class CSVImport {
     private static void locationDependingOnWhichFieldIsSet(Location location, String[] value) {
         final var first = value[3];
         final var second = value[4];
-        if(first == null){
+        if(isNullOrEmptyOrBlank(first)){
             location.setLocation(second);
-        } else if (second == null) {
+        } else if (isNullOrEmptyOrBlank(second)) {
             location.setLocation(first);
         } else {
             location.setLocation(first +"-"+ second);
         }
+    }
+
+    private static boolean isNullOrEmptyOrBlank(String first) {
+        return Strings.isNullOrEmpty(first) || first.isBlank();
     }
 
     /**
