@@ -25,4 +25,9 @@ public class LocationService implements LocationCommands {
     public void createLocations(List<Location> locations) {
         locationRepo.persist(locations);
     }
+
+    @Override
+    public boolean isLocationDataEmpty() {
+        return locationRepo.count() == 0;
+    }
 }

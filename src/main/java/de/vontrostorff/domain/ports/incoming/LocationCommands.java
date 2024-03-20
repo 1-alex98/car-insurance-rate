@@ -8,4 +8,6 @@ public interface LocationCommands {
     List<Location> searchByPLZ(int plz);
 
     void createLocations(List<Location> locations);
+
+    boolean isLocationDataEmpty();
 }

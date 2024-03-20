@@ -40,6 +40,7 @@ public class CSVImport {
             return;
         }
         final var locations = readFile();
+        if(!locationCommands.isLocationDataEmpty()) return;
         locationCommands.createLocations(locations);
     }
 
@@ -60,7 +61,7 @@ public class CSVImport {
     private List<Location> parseLocations(CSVReaderHeaderAware csvReader) {
         String[] value;
         final var res = new ArrayList<Location>();
-        while ((value = csvReader.readNext(" REGION1"," REGION3"," REGION4", " ORT", " POSTLEITZAHL")) != null)
+        while ((value = csvReader.readNext(" REGION1"," REGION3"," REGION4", " ORT", "AREA1", " POSTLEITZAHL")) != null)
         {
             final var location = new Location();
             mapArrayToLocation(location, value);
@@ -73,9 +74,21 @@ public class CSVImport {
         location.setRegion1(value[0]);
         location.setRegion3(value[1]);
         location.setRegion4(value[2]);
-        location.setLocation(value[3]);
-        location.setPlz(Integer.parseInt(value[4]));
+        locationDependingOnWhichFieldIsSet(location, value);
+        location.setPlz(Integer.parseInt(value[5]));
         location.setMultiplier(getMultiplier());
+    }
+
+    private static void locationDependingOnWhichFieldIsSet(Location location, String[] value) {
+        final var first = value[3];
+        final var second = value[4];
+        if(first == null){
+            location.setLocation(second);
+        } else if (second == null) {
+            location.setLocation(first);
+        } else {
+            location.setLocation(first +"-"+ second);
+        }
     }
 
     /**
